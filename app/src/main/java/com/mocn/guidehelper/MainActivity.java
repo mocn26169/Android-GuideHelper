@@ -15,5 +15,6 @@ public class MainActivity extends AppCompatActivity {
         Toast.makeText(this, "this is a tip", Toast.LENGTH_SHORT).show();
         Dialog dialog;
         PopupWindow popWindow;
+
     }
 }
