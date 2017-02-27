@@ -3,6 +3,7 @@ package com.mocn.guidehelper;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Picture;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Environment;
@@ -88,6 +89,12 @@ public class ScreenShotActivity extends AppCompatActivity {
         for (int i = 0; i < scrollView.getChildCount(); i++) {
             h += scrollView.getChildAt(i).getHeight();
         }
+        //如果是webView
+//        Picture snapShot = webView.capturePicture();
+//        Bitmap bmp = Bitmap.createBitmap(snapShot.getWidth(),
+//                snapShot.getHeight(), Bitmap.Config.ARGB_8888);
+//        Canvas canvas = new Canvas(bmp);
+//        snapShot.draw(canvas);
         Log.i("ScreenShot", " 高度:" + scrollView.getHeight());
         Log.i("ScreenShot", "实际高度:" + h);
 

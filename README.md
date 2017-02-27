@@ -208,29 +208,38 @@ getDrawingCache()被经常用来做屏幕截图，比如说：
 关键代码如下：
 
 ```
-  /**
-     * 截取超过程序界面的长图
-     */
-    private void saveLongView() {
-        int h = 0;
-        // 获取listView实际高度
-        for (int i = 0; i < scrollView.getChildCount(); i++) {
-            h += scrollView.getChildAt(i).getHeight();
-        }
-        Log.i("ScreenShot", " 高度:" + scrollView.getHeight());
-        Log.i("ScreenShot", "实际高度:" + h);
+   /**
+       * 截取超过程序界面的长图
+       */
+      private void saveLongView() {
+          int h = 0;
+          // 获取listView实际高度
+  //        for (int i = 0; i < listView.getChildCount(); i++) {
+  //            h += listView.getChildAt(i).getHeight();
+  //        }
+          // 获取scrollView实际高度
+          for (int i = 0; i < scrollView.getChildCount(); i++) {
+              h += scrollView.getChildAt(i).getHeight();
+          }
+          //如果是webView
+  //        Picture snapShot = webView.capturePicture();
+  //        Bitmap bmp = Bitmap.createBitmap(snapShot.getWidth(),
+  //                snapShot.getHeight(), Bitmap.Config.ARGB_8888);
+  //        Canvas canvas = new Canvas(bmp);
+  //        snapShot.draw(canvas);
+          Log.i("ScreenShot", " 高度:" + scrollView.getHeight());
+          Log.i("ScreenShot", "实际高度:" + h);
 
+          Bitmap bitmap;
+          // 创建对应大小的bitmap
+          bitmap = Bitmap.createBitmap(scrollView.getWidth(), h,
+                  Bitmap.Config.ARGB_8888);
+          final Canvas canvas = new Canvas(bitmap);
+          scrollView.draw(canvas);
 
-        Bitmap bitmap;
-        // 创建对应大小的bitmap
-        bitmap = Bitmap.createBitmap(scrollView.getWidth(), h,
-                Bitmap.Config.ARGB_8888);
-        final Canvas canvas = new Canvas(bitmap);
-        scrollView.draw(canvas);
-
-        //将图片保存到SD卡
-        saveBitmap("ScreenShot", bitmap);
-    }
+          //将图片保存到SD卡
+          saveBitmap("ScreenShot", bitmap);
+      }
 ```
 
 未完待续，即系拓展延伸：
