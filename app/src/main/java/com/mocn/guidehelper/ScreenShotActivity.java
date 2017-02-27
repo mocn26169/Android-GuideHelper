@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ScrollView;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -17,12 +18,14 @@ import java.io.IOException;
 
 public class ScreenShotActivity extends AppCompatActivity {
     private Button btn_save;
+    private ScrollView scrollView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_screen_shot);
         btn_save = (Button) findViewById(R.id.btn_save);
+        scrollView = (ScrollView) findViewById(R.id.scrollView);
 
         btn_save.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -48,6 +51,7 @@ public class ScreenShotActivity extends AppCompatActivity {
         //获取状态栏高度
         int statusBarHeight = rect.top;
 
+        //获取图片宽高
         int width = bmp.getWidth();
         int height = bmp.getHeight();
 
@@ -60,9 +64,15 @@ public class ScreenShotActivity extends AppCompatActivity {
         //释放缓存
         decorView.destroyDrawingCache();
 
-        saveBitmap("ScreenShot11111111111111111", saveBmp);
+        //将图片保存到SD卡
+        saveBitmap("ScreenShot", saveBmp);
     }
 
+    /**
+     * 保存图片
+     * @param bitName
+     * @param mBitmap
+     */
     public void saveBitmap(String bitName, Bitmap mBitmap) {
         //创建目录
         String path = createSDCardDirectory(ScreenShotActivity.this, "Android-GuideHelper", "Android-GuideHelper-Image");

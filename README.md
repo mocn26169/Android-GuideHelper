@@ -145,3 +145,52 @@ layoutParams.addRule(RelativeLayout.ALIGN_LEFT, newLightView.getId());
 //添加到布局
 guidelayout.addView(newTipView, layoutParams);
 ```
+
+还有一些属性和点击事件的设置可以自己封装
+思考：为什么要使用getDrawingCache()获取缓存？
+在这个例子当中最重要的是复制一个view，而复制一个View的重点又是根据getDrawingCache()获取缓存的Bitmap，并显示在界面上
+getDrawingCache()被经常用来做屏幕截图，比如说：
+
+看下手机截图：
+
+<img width="320" height="480" src="raw/ScreenShot2.jpg"/>
+
+截图之后的效果图
+
+<img width="320" height="480" src="raw/ScreenShot1.png"/>
+
+
+可以看到，截取了除状态栏外，标题栏和内容的界面，关键代码如下：
+```
+//DecorView只有一个子元素为LinearLayout。代表整个Window界面，包含通知栏，标题栏，内容显示栏三块区域
+  View decorView = getWindow().getDecorView();
+  //开启能缓存图片信息
+  decorView.setDrawingCacheEnabled(true);
+  //获取视图缓存
+  decorView.buildDrawingCache();
+  //根据缓存获取Bitmap
+  Bitmap bmp = decorView.getDrawingCache();
+
+  Rect rect = new Rect();
+  //getWindowVisibleDisplayFrame方法可以获取到程序显示的区域，包括标题栏，但不包括状态栏
+  decorView.getWindowVisibleDisplayFrame(rect);
+  //获取状态栏高度
+  int statusBarHeight = rect.top;
+
+  //获取图片宽高
+  int width = bmp.getWidth();
+  int height = bmp.getHeight();
+
+  //坐标轴和高度都减去状态栏的高度
+  Bitmap saveBmp = Bitmap.createBitmap(bmp, 0, statusBarHeight,
+  width, height - statusBarHeight, null, false);
+
+  //关闭能缓存图片信息
+  decorView.setDrawingCacheEnabled(false);
+  //释放缓存
+  decorView.destroyDrawingCache();
+
+  //将图片保存到SD卡
+  saveBitmap("ScreenShot", saveBmp);
+
+```
