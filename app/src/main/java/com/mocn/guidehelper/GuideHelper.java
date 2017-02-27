@@ -26,12 +26,10 @@ import java.util.List;
 
 public class GuideHelper {
 
-    List<PageData> pageDatas;
-
+    private  List<PageData> pageDatas;
     private Activity activity;
     private Dialog guideDialog;
     private RelativeLayout guidelayout;
-    private int imageViewId = 89598;
 
     public GuideHelper(Activity activity, List<PageData> pageDatas) {
         this.activity = activity;
@@ -66,10 +64,15 @@ public class GuideHelper {
 
 //            //创建Dialog，遮挡状态栏
 //            guideDialog = new Dialog(activity, android.R.style.Theme_DeviceDefault_Light_DialogWhenLarge_NoActionBar);
+//            //设置背景颜色
 //            guideDialog.getWindow().setBackgroundDrawable(new ColorDrawable(0x66000000));
+//            //设置自定义的布局
 //            guideDialog.setContentView(guidelayout);
+//            //设置布局的属性
 //            guideDialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
-//            guideDialog.setCancelable(true);
+//           //设置点击不能取消
+//            guideDialog.setCancelable(false);
+//            //显示Dialog
 //            guideDialog.show();
         }
 
@@ -88,17 +91,6 @@ public class GuideHelper {
         int tipsImageResourceId = pageDatas.get(0).getTipsImageResourceId();
 
         /**********显示高亮控件**********/
-        //获取view在屏幕的位置
-        int[] location = new int[2];
-        lightView.getLocationOnScreen(location);
-
-        //获取layout在屏幕上的位置
-        int layoutOffset[] = new int[2];
-        guidelayout.getLocationOnScreen(layoutOffset);
-
-        //这里避免dialog不是全屏，导致view的绘制位置不对应
-        location[1] -= layoutOffset[1];
-
         //获取view的宽高
         int vWidth = lightView.getMeasuredWidth();
         int vHeight = lightView.getMeasuredHeight();
@@ -117,9 +109,22 @@ public class GuideHelper {
             return;
         }
 
-        //通过getDrawingCache的方式获取view的视图缓存
+        //获取view在屏幕的位置
+        int[] location = new int[2];
+        lightView.getLocationOnScreen(location);
+
+        //获取layout在屏幕上的位置
+        int layoutOffset[] = new int[2];
+        guidelayout.getLocationOnScreen(layoutOffset);
+
+        //这里避免dialog不是全屏，导致view的绘制位置不对应
+        location[1] -= layoutOffset[1];
+
+        //开启能缓存图片信息
         lightView.setDrawingCacheEnabled(true);
+        //获取视图缓存
         lightView.buildDrawingCache();
+
         Bitmap LightBitmap = lightView.getDrawingCache();
         if (LightBitmap != null) {
             //根据缓存获取Bitmap
@@ -131,8 +136,9 @@ public class GuideHelper {
             lightView.draw(canvas);
         }
 
-        //释放缓存
+        //关闭能缓存图片信息
         lightView.setDrawingCacheEnabled(false);
+        //释放缓存
         lightView.destroyDrawingCache();
 
         //设置ImageView属性
@@ -141,7 +147,7 @@ public class GuideHelper {
         newLightView.setImageBitmap(LightBitmap);
 
         //动态设置Viwe的id
-        imageViewId = R.id.snack;
+        int  imageViewId = R.id.snack;
         newLightView.setId(imageViewId);
 
         //设置位置
@@ -171,7 +177,7 @@ public class GuideHelper {
         //设置间距(可自行封装)
         //layoutParams.topMargin += dipToPix(activity, 20);
 
-        //设置位置(可自行封装)
+        //设置相对位置(可自行封装)
         layoutParams.addRule(RelativeLayout.BELOW, newLightView.getId());
         layoutParams.addRule(RelativeLayout.ALIGN_LEFT, newLightView.getId());
         //layoutParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
