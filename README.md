@@ -1,6 +1,6 @@
 # Android-GuideHelper
 Android蒙版向导
-#效果图如下
+#效果图
 
 ![image](raw/demo.gif)
 
