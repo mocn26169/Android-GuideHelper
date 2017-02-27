@@ -162,42 +162,47 @@ getDrawingCache()被经常用来做屏幕截图，比如说：
 
 可以看到，截取了除状态栏外，标题栏和内容的界面，关键代码如下：
 ```
-  //DecorView只有一个子元素为LinearLayout。代表整个Window界面，包含通知栏，标题栏，内容显示栏三块区域
-  View decorView = getWindow().getDecorView();
-  //开启能缓存图片信息
-  decorView.setDrawingCacheEnabled(true);
-  //获取视图缓存
-  decorView.buildDrawingCache();
-  //根据缓存获取Bitmap
-  Bitmap bmp = decorView.getDrawingCache();
+  /**
+      * 截取当前程序界面
+      */
+     private void saveView() {
+         //DecorView只有一个子元素为LinearLayout。代表整个Window界面，包含通知栏，标题栏，内容显示栏三块区域
+         View decorView = getWindow().getDecorView();
+         //开启能缓存图片信息
+         decorView.setDrawingCacheEnabled(true);
+         //获取视图缓存
+         decorView.buildDrawingCache();
+         //根据缓存获取Bitmap
+         Bitmap bmp = decorView.getDrawingCache();
 
-  Rect rect = new Rect();
-  //getWindowVisibleDisplayFrame方法可以获取到程序显示的区域，包括标题栏，但不包括状态栏
-  decorView.getWindowVisibleDisplayFrame(rect);
-  //获取状态栏高度
-  int statusBarHeight = rect.top;
+         Rect rect = new Rect();
+         //getWindowVisibleDisplayFrame方法可以获取到程序显示的区域，包括标题栏，但不包括状态栏
+         decorView.getWindowVisibleDisplayFrame(rect);
+         //获取状态栏高度
+         int statusBarHeight = rect.top;
 
-  //获取图片宽高
-  int width = bmp.getWidth();
-  int height = bmp.getHeight();
+         //获取图片宽高
+         int width = bmp.getWidth();
+         int height = bmp.getHeight();
 
-  //坐标轴和高度都减去状态栏的高度
-  Bitmap saveBmp = Bitmap.createBitmap(bmp, 0, statusBarHeight,
-  width, height - statusBarHeight, null, false);
+         //坐标轴和高度都减去状态栏的高度
+         Bitmap saveBmp = Bitmap.createBitmap(bmp, 0, statusBarHeight,
+                 width, height - statusBarHeight, null, false);
 
-  //关闭能缓存图片信息
-  decorView.setDrawingCacheEnabled(false);
-  //释放缓存
-  decorView.destroyDrawingCache();
+         //关闭能缓存图片信息
+         decorView.setDrawingCacheEnabled(false);
+         //释放缓存
+         decorView.destroyDrawingCache();
 
-  //将图片保存到SD卡
-  saveBitmap("ScreenShot", saveBmp);
+         //将图片保存到SD卡
+         saveBitmap("ScreenShot", saveBmp);
+     }
 
 ```
 
 有时候，我们需要截取超过屏幕外的界面，比如说listview和scrollView，就要动态计算加起来的子view的总高度了，效果图如下：
 
-<img width="320" height="960" src="raw/ScreenShot3.jpg"/>
+<img width="240" height="1080" src="raw/ScreenShot3.jpg"/>
 
 关键代码如下：
 
@@ -211,8 +216,9 @@ getDrawingCache()被经常用来做屏幕截图，比如说：
         for (int i = 0; i < scrollView.getChildCount(); i++) {
             h += scrollView.getChildAt(i).getHeight();
         }
-        Log.i("ScreenShot", "实际高度:" + h);
         Log.i("ScreenShot", " 高度:" + scrollView.getHeight());
+        Log.i("ScreenShot", "实际高度:" + h);
+
 
         Bitmap bitmap;
         // 创建对应大小的bitmap

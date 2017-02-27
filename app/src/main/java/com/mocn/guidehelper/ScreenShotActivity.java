@@ -81,11 +81,15 @@ public class ScreenShotActivity extends AppCompatActivity {
     private void saveLongView() {
         int h = 0;
         // 获取listView实际高度
+//        for (int i = 0; i < listView.getChildCount(); i++) {
+//            h += listView.getChildAt(i).getHeight();
+//        }
+        // 获取scrollView实际高度
         for (int i = 0; i < scrollView.getChildCount(); i++) {
             h += scrollView.getChildAt(i).getHeight();
         }
-        Log.i("ScreenShot", "实际高度:" + h);
         Log.i("ScreenShot", " 高度:" + scrollView.getHeight());
+        Log.i("ScreenShot", "实际高度:" + h);
 
         Bitmap bitmap;
         // 创建对应大小的bitmap
