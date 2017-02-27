@@ -1,5 +1,5 @@
 # Android-GuideHelper
-Android蒙版向导
+Android蒙版向导开发的一些领悟，希望可以用其中的一些知识延伸出更多的东西。
 #效果图
 
 ![image](raw/demo.gif)
