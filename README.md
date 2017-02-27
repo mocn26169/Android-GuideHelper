@@ -155,14 +155,14 @@ getDrawingCache()被经常用来做屏幕截图，比如说：
 
 <img width="320" height="480" src="raw/ScreenShot2.jpg"/>
 
-截图之后的效果图
+截图之后的图片
 
 <img width="320" height="480" src="raw/ScreenShot1.png"/>
 
 
 可以看到，截取了除状态栏外，标题栏和内容的界面，关键代码如下：
 ```
-//DecorView只有一个子元素为LinearLayout。代表整个Window界面，包含通知栏，标题栏，内容显示栏三块区域
+  //DecorView只有一个子元素为LinearLayout。代表整个Window界面，包含通知栏，标题栏，内容显示栏三块区域
   View decorView = getWindow().getDecorView();
   //开启能缓存图片信息
   decorView.setDrawingCacheEnabled(true);
@@ -194,3 +194,35 @@ getDrawingCache()被经常用来做屏幕截图，比如说：
   saveBitmap("ScreenShot", saveBmp);
 
 ```
+
+有时候，我们需要截取超过屏幕外的界面，比如说listview和scrollView，就要动态计算加起来的子view的总高度了，效果图如下：
+
+<img width="320" height="960" src="raw/ScreenShot3.jpg"/>
+
+关键代码如下：
+
+```
+  /**
+     * 截取超过程序界面的长图
+     */
+    private void saveLongView() {
+        int h = 0;
+        // 获取listView实际高度
+        for (int i = 0; i < scrollView.getChildCount(); i++) {
+            h += scrollView.getChildAt(i).getHeight();
+        }
+        Log.i("ScreenShot", "实际高度:" + h);
+        Log.i("ScreenShot", " 高度:" + scrollView.getHeight());
+
+        Bitmap bitmap;
+        // 创建对应大小的bitmap
+        bitmap = Bitmap.createBitmap(scrollView.getWidth(), h,
+                Bitmap.Config.ARGB_8888);
+        final Canvas canvas = new Canvas(bitmap);
+        scrollView.draw(canvas);
+
+        //将图片保存到SD卡
+        saveBitmap("ScreenShot", bitmap);
+    }
+```
+

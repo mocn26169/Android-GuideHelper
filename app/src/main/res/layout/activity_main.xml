@@ -5,16 +5,16 @@
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
     android:orientation="vertical"
->
+    >
 
     <Button
         android:id="@+id/btn_1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
         android:text="蒙版向导"
         android:textAllCaps="false"
-
-    />
+        />
 
 
     <Button
@@ -23,9 +23,10 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
+        android:layout_marginTop="10dp"
         android:gravity="center"
         android:text="全屏截图"
         android:textAllCaps="false"
-    />
+        />
 
 </LinearLayout>

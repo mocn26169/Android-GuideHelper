@@ -2,6 +2,7 @@ package com.mocn.guidehelper;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Environment;
@@ -15,6 +16,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+
+import static android.R.attr.bitmap;
 
 public class ScreenShotActivity extends AppCompatActivity {
     private Button btn_save;
@@ -30,11 +33,15 @@ public class ScreenShotActivity extends AppCompatActivity {
         btn_save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                saveView();
+//                saveView();
+                saveLongView();
             }
         });
     }
 
+    /**
+     * 截取当前程序界面
+     */
     private void saveView() {
         //DecorView只有一个子元素为LinearLayout。代表整个Window界面，包含通知栏，标题栏，内容显示栏三块区域
         View decorView = getWindow().getDecorView();
@@ -69,7 +76,31 @@ public class ScreenShotActivity extends AppCompatActivity {
     }
 
     /**
+     * 截取超过程序界面的长图
+     */
+    private void saveLongView() {
+        int h = 0;
+        // 获取listView实际高度
+        for (int i = 0; i < scrollView.getChildCount(); i++) {
+            h += scrollView.getChildAt(i).getHeight();
+        }
+        Log.i("ScreenShot", "实际高度:" + h);
+        Log.i("ScreenShot", " 高度:" + scrollView.getHeight());
+
+        Bitmap bitmap;
+        // 创建对应大小的bitmap
+        bitmap = Bitmap.createBitmap(scrollView.getWidth(), h,
+                Bitmap.Config.ARGB_8888);
+        final Canvas canvas = new Canvas(bitmap);
+        scrollView.draw(canvas);
+
+        //将图片保存到SD卡
+        saveBitmap("ScreenShot", bitmap);
+    }
+
+    /**
      * 保存图片
+     *
      * @param bitName
      * @param mBitmap
      */
@@ -126,6 +157,7 @@ public class ScreenShotActivity extends AppCompatActivity {
             return null;
         }
     }
+
     /**
      * 创建缓存目录
      */
