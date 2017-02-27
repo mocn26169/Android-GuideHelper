@@ -147,6 +147,7 @@ guidelayout.addView(newTipView, layoutParams);
 ```
 
 还有一些属性和点击事件的设置可以自己封装
+
 思考：为什么要使用getDrawingCache()获取缓存？
 在这个例子当中最重要的是复制一个view，而复制一个View的重点又是根据getDrawingCache()获取缓存的Bitmap，并显示在界面上
 getDrawingCache()被经常用来做屏幕截图，比如说：
@@ -232,3 +233,5 @@ getDrawingCache()被经常用来做屏幕截图，比如说：
     }
 ```
 
+未完待续，即系拓展延伸：
+GridView拖动交换位置效果
