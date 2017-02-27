@@ -1,42 +1,43 @@
 package com.mocn.guidehelper;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    private TextView tv_first;
-    private Button btn_first;
-    private Button btn_second;
+    private Button btn_1;
+    private Button btn_2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        tv_first = (TextView) findViewById(R.id.tv_first);
-        btn_first = (Button) findViewById(R.id.btn_first);
-        btn_second = (Button) findViewById(R.id.btn_second);
+        btn_1 = (Button) findViewById(R.id.btn_1);
+        btn_2 = (Button) findViewById(R.id.btn_2);
 
-        btn_first.setOnClickListener(new View.OnClickListener() {
+        btn_1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                toActvity(MainActivity.this, GuideHelperActivity.class);
+            }
+        });
 
-                List<GuideHelper.PageData> pageDatas = new ArrayList<GuideHelper.PageData>();
-                pageDatas.add(new GuideHelper.PageData(btn_first, R.mipmap.tip1));
-                pageDatas.add(new GuideHelper.PageData(tv_first, R.mipmap.tip1));
-                pageDatas.add(new GuideHelper.PageData(btn_second, R.mipmap.tip1));
-
-                GuideHelper guideHelper = new GuideHelper(MainActivity.this, pageDatas);
-                guideHelper.show();
+        btn_2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toActvity(MainActivity.this, ScreenShotActivity.class);
             }
         });
 
     }
 
+    private void toActvity(Context _this, Class<? extends Activity> _class) {
+        Intent intent = new Intent(_this, _class);
+        _this.startActivity(intent);
+    }
 }

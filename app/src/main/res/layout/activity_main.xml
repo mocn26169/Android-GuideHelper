@@ -1,51 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.mocn.guidehelper.MainActivity">
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center">
-        <Button
-            android:id="@+id/btn_first"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="开始"
-            android:background="#FA8072"
-            android:textColor="#FFFFFF"
-            android:textAllCaps="false"
-        />
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="50dp">
-
-            <TextView
-                android:id="@+id/tv_first"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="#FFFFFF"
-                android:textColor="#000000"
-                android:text="你好"/>
-        </RelativeLayout>
-
-
-    </LinearLayout>
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+>
 
     <Button
-        android:id="@+id/btn_second"
+        android:id="@+id/btn_1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
+        android:text="蒙版向导"
+        android:textAllCaps="false"
+
+    />
+
+
+    <Button
+        android:id="@+id/btn_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
         android:gravity="center"
-        android:background="#FA8072"
-        android:textColor="#FFFFFF"
-        android:text="结束"
+        android:text="全屏截图"
         android:textAllCaps="false"
     />
-</RelativeLayout>
+
+</LinearLayout>

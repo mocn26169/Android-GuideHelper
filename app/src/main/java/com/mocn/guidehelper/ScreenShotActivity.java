@@ -1,13 +1,142 @@
 package com.mocn.guidehelper;
 
-import android.support.v7.app.AppCompatActivity;
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Rect;
 import android.os.Bundle;
+import android.os.Environment;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 public class ScreenShotActivity extends AppCompatActivity {
+    private Button btn_save;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_screen_shot);
+        btn_save = (Button) findViewById(R.id.btn_save);
+
+        btn_save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                saveView();
+            }
+        });
+    }
+
+    private void saveView() {
+        //DecorView只有一个子元素为LinearLayout。代表整个Window界面，包含通知栏，标题栏，内容显示栏三块区域
+        View decorView = getWindow().getDecorView();
+        //开启能缓存图片信息
+        decorView.setDrawingCacheEnabled(true);
+        //获取视图缓存
+        decorView.buildDrawingCache();
+        //根据缓存获取Bitmap
+        Bitmap bmp = decorView.getDrawingCache();
+
+        Rect rect = new Rect();
+        //getWindowVisibleDisplayFrame方法可以获取到程序显示的区域，包括标题栏，但不包括状态栏
+        decorView.getWindowVisibleDisplayFrame(rect);
+        //获取状态栏高度
+        int statusBarHeight = rect.top;
+
+        int width = bmp.getWidth();
+        int height = bmp.getHeight();
+
+        //坐标轴和高度都减去状态栏的高度
+        Bitmap saveBmp = Bitmap.createBitmap(bmp, 0, statusBarHeight,
+                width, height - statusBarHeight, null, false);
+
+        //关闭能缓存图片信息
+        decorView.setDrawingCacheEnabled(false);
+        //释放缓存
+        decorView.destroyDrawingCache();
+
+        saveBitmap("ScreenShot11111111111111111", saveBmp);
+    }
+
+    public void saveBitmap(String bitName, Bitmap mBitmap) {
+        //创建目录
+        String path = createSDCardDirectory(ScreenShotActivity.this, "Android-GuideHelper", "Android-GuideHelper-Image");
+        //路径
+        String filePath = path + "/" + bitName + ".png";
+        File f = new File(filePath);
+        try {
+            f.createNewFile();
+        } catch (IOException e) {
+            Log.e("ScreenShotActivity", "保存图片时出错：" + e.toString());
+        }
+        FileOutputStream fOut = null;
+        try {
+            fOut = new FileOutputStream(f);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        mBitmap.compress(Bitmap.CompressFormat.PNG, 100, fOut);
+        try {
+            fOut.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            fOut.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 创建SDCard目录
+     */
+    public String createSDCardDirectory(Context context, String appName, String position) {
+        if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
+            // 创建一个文件夹对象，赋值为外部存储器的目录
+            File sdcardDir = Environment.getExternalStorageDirectory();
+
+            //得到一个路径，内容是sdcard的文件夹路径和名字
+//            String path = sdcardDir.getPath() + "/" + appName + "/" + position;
+            String path = sdcardDir.getPath() + "/" + position;
+            File filePath = new File(path);
+            if (!filePath.exists()) {
+                //若不存在，创建目录，可以在应用启动的时候创建
+                boolean isSuccess = filePath.mkdirs();
+                Log.e("ScreenShotActivity", "创建文件夹路径是否成功=" + isSuccess);
+            }
+            return path;
+        } else {
+            Log.e("ScreenShotActivity", "创建保存路径失败，无法找到SDCard");
+            return null;
+        }
+    }
+    /**
+     * 创建缓存目录
+     */
+    public String createCacheDirectory(Context context, String appName, String position) {
+        if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
+            // 创建一个文件夹对象，赋值为外部存储器的目录
+            File sdcardDir = context.getExternalFilesDir(position);
+
+            //得到一个路径，内容是sdcard的文件夹路径和名字
+            String path = sdcardDir.getPath() + "/" + position;
+
+            File filePath = new File(path);
+            if (!filePath.exists()) {
+                //若不存在，创建目录，可以在应用启动的时候创建
+                boolean isSuccess = filePath.mkdirs();
+                Log.e("ScreenShotActivity", "创建文件夹路径是否成功=" + isSuccess);
+            }
+            return path;
+        } else {
+            Log.e("ScreenShotActivity", "创建保存路径失败，无法找到SDCard");
+            return null;
+        }
     }
 }
